@@ -18,6 +18,7 @@ public class BoardDAO {
     private final String BOARD_UPDATE = "UPDATE BOARD SET title=?, writer=?, content=? WHERE id=?";
     private final String BOARD_DELETE = "DELETE FROM BOARD WHERE id=?";
     private final String BOARD_UPDATE_CNT = "UPDATE BOARD SET cnt = cnt + 1 WHERE id = ?";
+    private final String BOARD_SEARCH = "SELECT * FROM BOARD WHERE title LIKE ? ORDER BY id DESC";
 
     // 글 작성 (INSERT)
     public int insertBoard(BoardVO vo) {
@@ -142,5 +143,33 @@ public class BoardDAO {
         } finally {
             JDBCUtil.close(stmt, conn);
         }
+    }
+
+    // 제목으로 검색 (SEARCH)
+    public List<BoardVO> searchBoardList(String keyword) {
+        System.out.println("-> JDBC로 searchBoardList() 기능처리");
+        List<BoardVO> list = new ArrayList<>();
+        try {
+            conn = JDBCUtil.getConnection();
+            stmt = conn.prepareStatement(BOARD_SEARCH);
+            stmt.setString(1, "%" + keyword + "%");
+            rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                BoardVO vo = new BoardVO();
+                vo.setId(rs.getInt("id"));
+                vo.setTitle(rs.getString("title"));
+                vo.setWriter(rs.getString("writer"));
+                vo.setContent(rs.getString("content"));
+                vo.setRegdate(rs.getDate("regdate"));
+                vo.setCnt(rs.getInt("cnt"));
+                list.add(vo);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            JDBCUtil.close(rs, stmt, conn);
+        }
+        return list;
     }
 }

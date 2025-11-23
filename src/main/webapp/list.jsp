@@ -7,12 +7,40 @@
 
 <%
     BoardDAO boardDAO = new BoardDAO();
-    List<BoardVO> list = boardDAO.getBoardList();
+    String keyword = request.getParameter("keyword");
+    List<BoardVO> list;
+
+    if(keyword != null && !keyword.trim().isEmpty()) {
+        list = boardDAO.searchBoardList(keyword);
+        request.setAttribute("keyword", keyword);
+    } else {
+        list = boardDAO.getBoardList();
+    }
     request.setAttribute("list", list);
 %>
 
 <div class="text-center mb-4">
     <h2 class="fw-bold">게시판</h2>
+</div>
+
+<div class="card mb-3">
+    <div class="card-body">
+        <form action="list.jsp" method="get" class="row g-2">
+            <div class="col-md-10">
+                <input type="text" class="form-control" name="keyword"
+                       placeholder="제목으로 검색..." value="${keyword}">
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary w-100">검색</button>
+            </div>
+        </form>
+        <c:if test="${not empty keyword}">
+            <div class="mt-2">
+                <span class="text-muted">검색어: <strong>${keyword}</strong></span>
+                <a href="list.jsp" class="btn btn-sm btn-outline-secondary ms-2">전체보기</a>
+            </div>
+        </c:if>
+    </div>
 </div>
 
 <table class="table table-bordered table-hover align-middle text-center">
@@ -30,7 +58,16 @@
     <c:choose>
         <c:when test="${empty list}">
             <tr>
-                <td colspan="6" class="text-center py-4">등록된 게시글이 없습니다.</td>
+                <td colspan="6" class="text-center py-4">
+                    <c:choose>
+                        <c:when test="${not empty keyword}">
+                            '<strong>${keyword}</strong>' 검색 결과가 없습니다.
+                        </c:when>
+                        <c:otherwise>
+                            등록된 게시글이 없습니다.
+                        </c:otherwise>
+                    </c:choose>
+                </td>
             </tr>
         </c:when>
         <c:otherwise>
