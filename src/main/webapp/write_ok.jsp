@@ -1,0 +1,19 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="org.example.project22.BoardDAO" %>
+
+<% request.setCharacterEncoding("UTF-8"); %>
+
+<jsp:useBean id="vo" class="org.example.project22.BoardVO" />
+<jsp:setProperty name="vo" property="*"/>
+
+<%
+    BoardDAO boardDAO = new BoardDAO();
+    int result = boardDAO.insertBoard(vo);
+    String msg = "데이터 추가 성공";
+    if(result == 0) msg = "데이터 추가 에러";
+%>
+
+<script>
+    alert('<%=msg%>');
+    location.href = "list.jsp";
+</script>
