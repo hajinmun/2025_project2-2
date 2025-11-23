@@ -2,6 +2,7 @@ package org.example.project22;
 
 import java.util.Date;
 
+//자바 빈
 public class BoardVO {
     private int seq;
     private String title;
