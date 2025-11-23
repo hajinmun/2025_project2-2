@@ -1,13 +1,13 @@
 package org.example.project22;
 
-import org.mariadb.jdbc.Connection;
+import java.sql.Connection;  // 이렇게 변경!
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
 public class BoardDAO {
-    Connection conn = null;
+    Connection conn = null;  // org.mariadb.jdbc.Connection 아님!
     PreparedStatement stmt = null;
     ResultSet rs = null;
 
@@ -23,7 +23,7 @@ public class BoardDAO {
     public int insertBoard(BoardVO vo) {
         System.out.println("-> JDBC로 insertBoard() 기능처리");
         try {
-            conn = (Connection) JDBCUtil.getConnection();
+            conn = JDBCUtil.getConnection();  // 캐스팅 제거
             stmt = conn.prepareStatement(BOARD_INSERT);
             stmt.setString(1, vo.getTitle());
             stmt.setString(2, vo.getWriter());
@@ -43,7 +43,7 @@ public class BoardDAO {
         System.out.println("-> JDBC로 getBoardList() 기능처리");
         List<BoardVO> list = new ArrayList<>();
         try {
-            conn = (Connection) JDBCUtil.getConnection();
+            conn = JDBCUtil.getConnection();  // 캐스팅 제거
             stmt = conn.prepareStatement(BOARD_SELECT_ALL);
             rs = stmt.executeQuery();
 
@@ -70,7 +70,7 @@ public class BoardDAO {
         System.out.println("-> JDBC로 getBoard() 기능처리");
         BoardVO vo = null;
         try {
-            conn = (Connection) JDBCUtil.getConnection();
+            conn = JDBCUtil.getConnection();  // 캐스팅 제거
             stmt = conn.prepareStatement(BOARD_SELECT_ONE);
             stmt.setInt(1, id);
             rs = stmt.executeQuery();
@@ -96,7 +96,7 @@ public class BoardDAO {
     public int updateBoard(BoardVO vo) {
         System.out.println("-> JDBC로 updateBoard() 기능처리");
         try {
-            conn = (Connection) JDBCUtil.getConnection();
+            conn = JDBCUtil.getConnection();  // 캐스팅 제거
             stmt = conn.prepareStatement(BOARD_UPDATE);
             stmt.setString(1, vo.getTitle());
             stmt.setString(2, vo.getWriter());
@@ -116,7 +116,7 @@ public class BoardDAO {
     public int deleteBoard(int id) {
         System.out.println("-> JDBC로 deleteBoard() 기능처리");
         try {
-            conn = (Connection) JDBCUtil.getConnection();
+            conn = JDBCUtil.getConnection();  // 캐스팅 제거
             stmt = conn.prepareStatement(BOARD_DELETE);
             stmt.setInt(1, id);
             stmt.executeUpdate();
@@ -133,7 +133,7 @@ public class BoardDAO {
     public void updateCnt(int id) {
         System.out.println("-> JDBC로 updateCnt() 기능처리");
         try {
-            conn = (Connection) JDBCUtil.getConnection();
+            conn = JDBCUtil.getConnection();  // 캐스팅 제거
             stmt = conn.prepareStatement(BOARD_UPDATE_CNT);
             stmt.setInt(1, id);
             stmt.executeUpdate();

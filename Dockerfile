@@ -24,7 +24,7 @@ FROM tomcat:9.0-jdk11-temurin
 RUN rm -rf /usr/local/tomcat/webapps/*
 
 # WAR 파일 복사
-COPY --from=build /app/target/*.war /usr/local/tomcat/webapps/ROOT.war
+COPY --from=build /app/target/*.war /usr/local/tomcat/webapps/board-app.war
 
 # 포트 설정
 EXPOSE 8080
